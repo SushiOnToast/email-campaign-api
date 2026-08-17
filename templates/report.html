@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Report{% endblock %}
+{% block content %}
+<h1>Campaign Report</h1>
+
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="value">{{ total_sent }}</div>
+        <div class="label">Total Attempts</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">{{ success_count }}</div>
+        <div class="label">Successful</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">{{ failed_count }}</div>
+        <div class="label">Failed</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">{{ success_rate }}%</div>
+        <div class="label">Success Rate</div>
+    </div>
+</div>
+
+<table>
+    <tr>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Timestamp</th>
+    </tr>
+    {% for row in log_rows %}
+    <tr>
+        <td>{{ row.email_address }}</td>
+        <td class="status-{{ row.status }}">{{ row.status }}</td>
+        <td>{{ row.timestamp }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<p><a href="/download-report">Download CSV</a></p>
+<p><a href="/">Back to Dashboard</a></p>
+{% endblock %}

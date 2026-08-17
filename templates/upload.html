@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Upload{% endblock %}
+{% block content %}
+<h1>Upload Buyers CSV</h1>
+
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="value">{{ row_count }}</div>
+        <div class="label">Row Count</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">{{ file_size }}</div>
+        <div class="label">File Size (bytes)</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">{{ last_modified }}</div>
+        <div class="label">Last Modified</div>
+    </div>
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+    <label>CSV File</label>
+    <input type="file" name="csv_file" accept=".csv" required>
+    <br><br>
+    <button type="submit">Upload</button>
+</form>
+
+<form method="POST" action="/run-discovery">
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+        Or run buyer discovery now (queries configured seed URLs and appends new results to buyers.csv).
+    </p>
+    <button type="submit">Run Discovery</button>
+</form>
+
+<h2>Current Buyers</h2>
+<div class="scroll-box">
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Company</th>
+            <th>Email</th>
+            <th>Website</th>
+            <th>Country</th>
+            <th>Source</th>
+        </tr>
+        {% for row in buyer_rows %}
+        <tr>
+            <td>{{ row.buyer_name }}</td>
+            <td>{{ row.company_name }}</td>
+            <td>{{ row.email }}</td>
+            <td>{{ row.website }}</td>
+            <td>{{ row.country }}</td>
+            <td>{{ row.source_platform }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="next-step">
+    <a href="/classify" class="button-link">Next: Classify &rarr;</a>
+</div>
+{% endblock %}

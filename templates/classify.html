@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Classify{% endblock %}
+{% block content %}
+<h1>AI Email Classification</h1>
+<p>Deduplicates buyer emails and sorts them into business / individual segments.</p>
+
+<form method="POST">
+    <button type="submit">Run Classification</button>
+</form>
+
+{% if result %}
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="value">{{ result.total_unique }}</div>
+        <div class="label">Total Unique Emails</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">{{ result.business_count }}</div>
+        <div class="label">Business</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">{{ result.individual_count }}</div>
+        <div class="label">Individual</div>
+    </div>
+</div>
+{% endif %}
+
+<div class="next-step">
+    <a href="/send" class="button-link">Next: Send Campaign &rarr;</a>
+</div>
+{% endblock %}

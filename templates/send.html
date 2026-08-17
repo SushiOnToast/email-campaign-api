@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Send Campaign{% endblock %}
+{% block content %}
+<h1>Send Outreach Campaign</h1>
+
+<div class="stat-card" style="max-width: 400px; margin-bottom: 20px;">
+    <div class="label">Current Attachment</div>
+    <div class="value" style="font-size: 1rem;">
+        {% if attachment_filename %}
+        📎 {{ attachment_filename }}
+        {% else %}
+        <span style="color: var(--error);">No presentation file found</span>
+        {% endif %}
+    </div>
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+    <label>Subject</label>
+    <input type="text" name="subject" value="{{ default_subject }}" required>
+    <br><br>
+
+    <label>Body</label>
+    <textarea name="body" rows="20" required>{{ default_body }}</textarea>
+    <br><br>
+
+    <label>Audience</label>
+    <select name="audience">
+        <option value="business">Business</option>
+        <option value="individual">Individual</option>
+        <option value="all">All</option>
+    </select>
+    <br><br>
+
+    <label>Override Presentation (optional)</label><br>
+    <input type="file" name="presentation_file" accept=".pdf,.pptx,.ppt">
+    <p style="font-size: 0.85rem; color: var(--text-muted);">
+        Leave blank to use the current attachment shown above.
+    </p>
+    <br>
+
+    <button type="submit">Send Campaign</button>
+</form>
+
+{% if result %}
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="value">{{ result.total }}</div>
+        <div class="label">Total Recipients</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">{{ result.success_count }}</div>
+        <div class="label">Success</div>
+    </div>
+    <div class="stat-card">
+        <div class="value">{{ result.failed_count }}</div>
+        <div class="label">Failed</div>
+    </div>
+</div>
+{% endif %}
+
+{% if result and result.failed %}
+<h2>Failures</h2>
+<table>
+    <tr>
+        <th>Email</th>
+        <th>Error</th>
+    </tr>
+    {% for f in result.failed %}
+    <tr>
+        <td>{{ f.email }}</td>
+        <td>{{ f.error }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<div class="next-step">
+    <a href="/report" class="button-link">Next: View Report &rarr;</a>
+</div>
+{% endblock %}
